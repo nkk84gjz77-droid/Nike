@@ -5,173 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulação Nike Brasil</title>
     <style>
-        /* Estilos Gerais Estilo Nike */
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #111;
-            background-color: #fff;
-        }
-
-        header {
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #f5f5f5;
-        }
-
+        /* --- 1. SEU CSS (ESTILO) --- */
+        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; color: #111; }
+        header { padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #f5f5f5; }
         .nike-logo { width: 50px; }
+        
+        .product-container { padding: 20px; max-width: 500px; margin: auto; }
+        .product-title { font-size: 24px; font-weight: 500; }
+        .price-current { font-size: 20px; font-weight: bold; }
+        
+        .size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .size-option { border: 1px solid #e5e5e5; padding: 15px; text-align: center; cursor: pointer; border-radius: 4px; }
+        .size-option.selected { border-color: #111; background: #f7f7f7; font-weight: bold; }
 
-        /* Container do Produto */
-        .product-container {
-            padding: 20px;
-            max-width: 500px;
-            margin: auto;
+        .btn-add { background: #000; color: #fff; width: 90%; padding: 18px; border-radius: 30px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .sticky-footer { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px 0; border-top: 1px solid #e5e5e5; display: flex; justify-content: center; z-index: 10; }
+
+        /* Estilo do Carrinho Lateral */
+        #carrinho-lateral { 
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 350px; 
+            height: 100%; background: white; z-index: 1000; transition: 0.4s; 
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1); 
         }
-
-        .product-title {
-            font-size: 24px;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-
-        .product-category {
-            color: #757575;
-            margin-bottom: 15px;
-        }
-
-        .price-box {
-            margin: 20px 0;
-        }
-
-        .price-current {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .discount {
-            color: #007d3b;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        /* Seleção de Tamanhos */
-        .size-header {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .size-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .size-option {
-            border: 1px solid #e5e5e5;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .size-option:hover { border-color: #111; }
-        .size-option.selected { border-color: #111; background: #f7f7f7; }
-
-        /* Botão Fixo */
-        .sticky-footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            padding: 15px 0;
-            border-top: 1px solid #e5e5e5;
-            display: flex;
-            justify-content: center;
-        }
-
-        .btn-add {
-            background: #000;
-            color: #fff;
-            width: 90%;
-            padding: 18px;
-            border-radius: 30px;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .product-image {
-            width: 100%;
-            background: #f6f6f6;
-            text-align: center;
-        }
-
-        .product-image img {
-            width: 100%;
-            max-width: 400px;
+        #overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; 
+            height: 100%; background: rgba(0,0,0,0.5); z-index: 999; 
         }
     </style>
 </head>
 <body>
 
-<header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" class="nike-logo" alt="Nike">
-    <div style="font-size: 24px;">☰</div>
-</header>
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" class="nike-logo">
+        <div style="font-size: 24px;">☰</div>
+    </header>
 
-<div class="product-image">
-    <img src="https://images.nike.com/is/image/DotCom/FJ4352_741_A_PREM?$SNKRS_COVER_WD$&align=0,1" alt="Camisa Brasil">
-</div>
+    <div class="product-container">
+        <img src="https://images.nike.com/is/image/DotCom/FJ4352_741_A_PREM?$SNKRS_COVER_WD$&align=0,1" style="width:100%; background:#f6f6f6;">
+        
+        <h1 class="product-title">Camisa Nike Brasil I 2024/25</h1>
+        <div class="price-current">R$ 379,99 no Pix</div>
 
-<div class="product-container">
-    <h1 class="product-title">Camisa Nike Brasil I 2024/25 Torcedor Pro Masculina</h1>
-    <p class="product-category">Futebol</p>
-
-    <div class="price-box">
-        <span class="price-current">R$ 119,99 no Pix</span>
-        <span class="discount">5% off</span>
-        <p style="color: #757575; font-size: 14px;">ou 4x de R$ 30,00 sem juros</p>
+        <p>Escolha o tamanho:</p>
+        <div class="size-grid">
+            <div class="size-option" onclick="selectSize(this)">P</div>
+            <div class="size-option" onclick="selectSize(this)">M</div>
+            <div class="size-option" onclick="selectSize(this)">G</div>
+            <div class="size-option" onclick="selectSize(this)">GG</div>
+        </div>
     </div>
 
-    <div class="size-header">
-        <span>Tamanho e numeração</span>
-        <a href="#" style="color: #111; text-decoration: underline;">Tabela de medidas</a>
+    <div class="sticky-footer">
+        <button class="btn-add" onclick="abrirCarrinho()">Adicionar ao carrinho</button>
     </div>
 
-    <div class="size-grid">
-        <div class="size-option" onclick="selectSize(this)">P</div>
-        <div class="size-option" onclick="selectSize(this)">M</div>
-        <div class="size-option" onclick="selectSize(this)">G</div>
-        <div class="size-option" onclick="selectSize(this)">GG</div>
+    <div id="overlay" onclick="fecharCarrinho()"></div>
+    <div id="carrinho-lateral">
+        <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                <h2 style="margin: 0; font-size: 18px;">Seu Carrinho</h2>
+                <button onclick="fecharCarrinho()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div style="padding: 20px 0; text-align: center;">
+                <p><strong>Produto adicionado!</strong></p>
+                <img src="https://images.nike.com/is/image/DotCom/FJ4352_741_A_PREM?$SNKRS_COVER_WD$&align=0,1" style="width: 100px;">
+                <p id="tamanho-escolhido">Tamanho: Não selecionado</p>
+            </div>
+            <button style="width: 100%; background: black; color: white; padding: 15px; border-radius: 30px; border: none; font-weight: bold;">Finalizar Compra</button>
+        </div>
     </div>
 
-    <div style="margin-top: 40px; color: #757575; line-height: 1.6;">
-        <h3>Descrição</h3>
-        <p>A nova camisa do Brasil 2024 apresenta uma textura completa que celebra a vasta herança natural e cultural do país...</p>
-    </div>
+    <script>
+        let tamanhoSelecionado = "";
 
-    <div style="height: 100px;"></div> </div>
+        function selectSize(element) {
+            // Remove destaque de todos
+            document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+            // Adiciona destaque ao clicado
+            element.classList.add('selected');
+            // Salva o tamanho
+            tamanhoSelecionado = element.innerText;
+            document.getElementById('tamanho-escolhido').innerText = "Tamanho: " + tamanhoSelecionado;
+        }
 
-<div class="sticky-footer">
-    <button class="btn-add">Adicionar ao carrinho</button>
-</div>
+        function abrirCarrinho() {
+            if(tamanhoSelecionado === "") {
+                alert("Por favor, selecione um tamanho primeiro!");
+                return;
+            }
+            document.getElementById('carrinho-lateral').style.right = '0';
+            document.getElementById('overlay').style.display = 'block';
+        }
 
-<script>
-    function selectSize(element) {
-        // Remove seleção de todos
-        document.querySelectorAll('.size-option').forEach(opt => {
-            opt.classList.remove('selected');
-        });
-        // Adiciona ao clicado
-        element.classList.add('selected');
-    }
-</script>
+        function fecharCarrinho() {
+            document.getElementById('carrinho-lateral').style.right = '-100%';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
